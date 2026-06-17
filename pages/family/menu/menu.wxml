@@ -1,0 +1,135 @@
+<view class="page">
+  <view class="nav" style="padding-top:{{statusBarHeight + 40}}px">
+    <view class="nav-row">
+      <text class="nav-back" bindtap="onGoHome">‹ 返回</text>
+      <text class="nav-title">{{tab === 'menu' ? '今日菜单' : '我的订单'}}</text>
+      <text class="nav-name" bindtap="onEditName">👤 {{dinerName}}</text>
+    </view>
+  </view>
+
+  <!-- Category pills -->
+  <view class="cat-bar" wx:if="{{tab === 'menu'}}">
+    <scroll-view class="cat-scroll" scroll-x>
+      <view wx:for="{{categories}}" wx:key="value" class="cat-pill {{activeCat === item.value ? 'pill-active' : ''}}" data-cat="{{item.value}}" bindtap="onSwitchCat">{{item.label}}</view>
+    </scroll-view>
+  </view>
+
+  <!-- Menu tab -->
+  <scroll-view wx:if="{{tab === 'menu'}}" class="body-scroll" scroll-y>
+    <view wx:if="{{filteredDishes.length === 0}}" class="empty-wrap">
+      <text class="empty-icon">🍽️</text>
+      <text class="empty-text">暂无菜品</text>
+    </view>
+    <view wx:else class="dish-list">
+      <view wx:for="{{filteredDishes}}" wx:key="id" class="dish-row">
+        <text class="d-emoji">{{item.emoji || '🍽️'}}</text>
+        <view class="d-info">
+          <text class="d-name">{{item.name}}</text>
+          <text class="d-desc">{{item.description}}</text>
+        </view>
+        <view class="d-qty">
+          <view wx:if="{{item.cartQty > 0}}" class="qty-minus" data-id="{{item.id}}" bindtap="onCartMinus">−</view>
+          <text wx:if="{{item.cartQty > 0}}" class="qty-num">{{item.cartQty}}</text>
+          <view class="qty-plus" data-id="{{item.id}}" data-dish="{{item}}" bindtap="onCartPlus">+</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Cart pill -->
+  <view wx:if="{{cartTotal > 0 && !cartOpen && tab === 'menu'}}" class="cart-pill" bindtap="onOpenCart">
+    <text class="cp-icon">🛒</text>
+    <text class="cp-badge">{{cartTotal}}</text>
+    <text class="cp-text">查看购物车</text>
+    <text class="cp-arrow">去结算 ›</text>
+  </view>
+
+  <!-- Orders tab -->
+  <scroll-view wx:if="{{tab === 'orders'}}" class="body-scroll" scroll-y>
+    <view class="profile-strip">
+      <view class="pf-avatar">😋</view>
+      <view class="pf-info">
+        <text class="pf-name">{{dinerName}}</text>
+        <text class="pf-count">{{myOrders.length}} 笔订单</text>
+      </view>
+    </view>
+    <view wx:if="{{myOrders.length === 0}}" class="empty-wrap">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">还没有订单，快去点菜吧！</text>
+    </view>
+    <view wx:else class="order-list">
+      <view wx:for="{{reversedOrders}}" wx:key="id" class="order-card">
+        <view class="oc-top">
+          <text class="oc-time">{{item.timeText}}</text>
+          <view wx:if="{{item.status === 'pending'}}" class="oc-badge badge-pending">等待接单</view>
+          <view wx:elif="{{item.status === 'cooking'}}" class="oc-badge badge-cooking">制作中</view>
+          <view wx:else class="oc-badge badge-served">已出餐</view>
+        </view>
+
+        <view class="oc-items">
+          <view wx:for="{{item.itemsGrouped}}" wx:for-item="grp" wx:key="cat" class="oc-group">
+            <text class="oc-cat">{{grp.cat}}</text>
+            <text wx:for="{{grp.items}}" wx:for-item="ci" wx:key="id">{{ci.emoji || '🍽️'}} {{ci.name}} × {{ci.quantity}} </text>
+          </view>
+        </view>
+
+        <text class="oc-note" wx:if="{{item.notes}}">备注：{{item.notes}}</text>
+
+        <view class="oc-steps">
+          <view class="step {{item.status === 'pending' || item.status === 'cooking' || item.status === 'served' ? 'step-done' : ''}}">
+            <view class="step-dot">✓</view>
+            <text class="step-label">已下单</text>
+          </view>
+          <view class="step-line {{item.status === 'cooking' || item.status === 'served' ? 'step-done' : ''}}"></view>
+          <view class="step {{item.status === 'cooking' || item.status === 'served' ? 'step-done' : ''}}">
+            <view class="step-dot">{{item.status === 'pending' ? '2' : '✓'}}</view>
+            <text class="step-label">制作中</text>
+          </view>
+          <view class="step-line {{item.status === 'served' ? 'step-done' : ''}}"></view>
+          <view class="step {{item.status === 'served' ? 'step-done' : ''}}">
+            <view class="step-dot">{{item.status === 'served' ? '✓' : '3'}}</view>
+            <text class="step-label">已出餐</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="tab-bar">
+    <view class="tb-item" data-tab="menu" bindtap="onSwitchTab"><text class="tb-label {{tab === 'menu' ? 'active' : ''}}">🍽️ 点菜</text></view>
+    <view class="tb-item" data-tab="orders" bindtap="onSwitchTab"><text class="tb-label {{tab === 'orders' ? 'active' : ''}}">📋 我的订单 <text wx:if="{{pendingCount > 0}}" class="tb-badge">{{pendingCount}}</text></text></view>
+  </view>
+
+  <!-- Cart bottom sheet -->
+  <view wx:if="{{cartOpen}}" class="overlay" bindtap="onCloseCart">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">购物车 ({{cartTotal}} 件)</text>
+        <text class="sheet-close" bindtap="onCloseCart">✕</text>
+      </view>
+       <scroll-view class="sheet-body" scroll-y>
+        <view wx:for="{{groupedCart}}" wx:key="cat" class="cg-group">
+          <text class="cg-cat">{{item.cat}}</text>
+          <view wx:for="{{item.items}}" wx:for-item="ci" wx:key="dishId" class="cart-row">
+            <text class="cr-emoji">{{ci.dish.emoji || '🍽️'}}</text>
+            <view class="cr-info">
+            <text class="cr-name">{{ci.dish.name}}</text>
+          </view>
+            <view class="cr-qty">
+              <view class="qty-minus" data-id="{{ci.dishId}}" bindtap="onCartMinus">−</view>
+              <text class="qty-num">{{ci.quantity}}</text>
+              <view class="qty-plus" data-id="{{ci.dishId}}" bindtap="onCartPlus">+</view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="sheet-foot">
+        <view class="sf-field">
+          <text class="sf-label">备注（口味偏好等）</text>
+          <input class="sf-input" placeholder="例如：少盐、不要辣..." value="{{note}}" bindinput="onNoteInput" />
+        </view>
+        <button class="sf-btn" bindtap="onSubmitOrder">提交订单</button>
+      </view>
+    </view>
+  </view>
+</view>

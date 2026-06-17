@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/chef/board/board",
+    "pages/chef/menu/menu",
+    "pages/chef/dish/dish",
+    "pages/family/menu/menu"
+  ],
+  "window": {
+    "navigationBarTitleText": "",
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#FFFFFF"
+  },
+  "sitemapLocation": "sitemap.json"
+}

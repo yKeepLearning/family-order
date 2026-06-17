@@ -1,0 +1,77 @@
+<view class="page">
+  <view class="nav" style="padding-top:{{statusBarHeight + 40}}px">
+    <view class="nav-row">
+      <text class="nav-back" bindtap="onGoHome">‹ 返回</text>
+      <text class="nav-title">菜品管理</text>
+      <text class="nav-add" bindtap="onOpenAdd">+ 添加</text>
+    </view>
+  </view>
+
+  <scroll-view wx:if="{{dishes.length > 0}}" class="body-scroll" scroll-y>
+    <text class="section-hint">共 {{dishes.length}} 道菜</text>
+    <view wx:for="{{dishes}}" wx:key="id" class="dish-row">
+      <text class="d-emoji">{{item.emoji || '🍽️'}}</text>
+      <view class="d-info">
+        <text class="d-name">{{item.name}}</text>
+        <text class="d-desc">{{item.description}}</text>
+      </view>
+      <view class="d-actions">
+        <view class="d-toggle {{item.isAvailable ? 'on' : 'off'}}" data-id="{{item.id}}" bindtap="onToggle">{{item.isAvailable ? '已上架' : '已下架'}}</view>
+        <view class="d-del" data-id="{{item.id}}" bindtap="onDelete">✕</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view wx:else class="empty-wrap">
+    <text class="empty-icon">🍽️</text>
+    <text class="empty-text">还没有菜品，点击右上角添加</text>
+  </view>
+
+  <view class="tab-bar">
+    <view class="tb-item" data-idx="0" bindtap="onTabClick"><text class="tb-label active">📋 菜单</text></view>
+    <view class="tb-item" data-idx="1" bindtap="onTabClick"><text class="tb-label">🛎️ 订单</text></view>
+  </view>
+
+  <!-- Add dish overlay -->
+  <view wx:if="{{showAdd}}" class="overlay" bindtap="onCloseAdd">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">添加菜品</text>
+        <text class="sheet-close" bindtap="onCloseAdd">✕</text>
+      </view>
+      <scroll-view class="sheet-body" scroll-y>
+        <view class="field">
+          <text class="label">菜名 *</text>
+          <input class="input" placeholder="例如：红烧肉" value="{{form.name}}" bindinput="onFormName" />
+        </view>
+        <view class="field-row">
+          <view class="field half">
+            <text class="label">表情符号</text>
+            <input class="input" value="{{form.emoji}}" bindinput="onFormEmoji" />
+          </view>
+          <view class="field half">
+            <text class="label">分类</text>
+            <view class="cat-select" bindtap="onToggleCatPicker">
+              <text>{{form.category}}</text>
+              <text class="cat-arrow">▾</text>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{showCatPicker}}" class="cat-picker">
+          <view wx:for="{{categories}}" wx:key="value" class="cat-opt {{form.category === item.value ? 'cat-opt-active' : ''}}" data-cat="{{item.value}}" bindtap="onPickCat">{{item.label}}</view>
+        </view>
+        <view class="field">
+          <text class="label">简介</text>
+          <input class="input" placeholder="简单描述这道菜..." value="{{form.desc}}" bindinput="onFormDesc" />
+        </view>
+        <view class="field">
+          <text class="label">制作时间（分钟）</text>
+          <input class="input" type="number" placeholder="15" value="{{form.cookTime}}" bindinput="onFormCookTime" />
+        </view>
+        <view class="sheet-btn-wrap">
+          <button class="sheet-btn" bindtap="onSubmitDish" disabled="{{!form.name}}">确认添加</button>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="top-bar">
+    <view class="status-bar" style="height:{{statusBarHeight}}px"></view>
+    <view class="header">
+      <text class="back" bindtap="onBack">‹</text>
+      <text class="title">添加菜品</text>
+    </view>
+  </view>
+
+  <view class="form">
+    <view class="field">
+      <text class="label">名称</text>
+      <input class="input" placeholder="如：红烧肉" value="{{name}}" bindinput="onNameInput" />
+    </view>
+    <view class="field">
+      <text class="label">Emoji</text>
+      <input class="input" placeholder="如：🍖" value="{{emoji}}" bindinput="onEmojiInput" maxlength="2" />
+    </view>
+    <view class="field">
+      <text class="label">简介</text>
+      <input class="input" placeholder="肥而不腻，入口即化" value="{{desc}}" bindinput="onDescInput" />
+    </view>
+  </view>
+
+  <view class="cat-section">
+    <text class="cat-label">分类</text>
+    <view class="cat-grid">
+      <view wx:for="{{categories}}" wx:key="value" class="cat-option {{category === item.value ? 'cat-selected' : ''}}" data-cat="{{item.value}}" bindtap="onSelectCat">
+        <text class="cat-emoji">{{item.icon}}</text>
+        <text class="cat-text">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="btn-area">
+    <button class="save-btn" bindtap="onSave" loading="{{loading}}">保存</button>
+  </view>
+</view>
