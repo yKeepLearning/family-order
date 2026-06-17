@@ -87,8 +87,7 @@ export default function DinerPage() {
     <div className="min-h-screen bg-background pb-20">
       {/* NavBar */}
       <div className="sticky top-0 z-50 bg-card border-b border-border">
-        <div className="h-11" />
-        <div className="h-11 flex items-center px-3 gap-2 relative">
+        <div className="h-12 flex items-center px-3 gap-2 relative">
           <button onClick={() => router.push("/")} className="flex items-center gap-0.5 text-primary text-sm font-medium">
             <ChevronLeft size={20} />返回
           </button>
@@ -243,7 +242,7 @@ export default function DinerPage() {
       {cartTotal > 0 && !cartOpen && tab === "menu" && (
         <button
           onClick={() => setCartOpen(true)}
-          className="fixed bottom-16 left-4 right-4 max-w-[calc(32rem-2rem)] mx-auto z-40 bg-primary text-white rounded-full py-3.5 flex items-center px-5 gap-3 shadow-lg"
+          className="fixed bottom-16 left-3 right-3 max-w-[calc(32rem-1.5rem)] mx-auto z-40 bg-primary text-white rounded-full py-3.5 flex items-center px-5 gap-3 shadow-lg"
         >
           <div className="relative">
             <ShoppingCart size={20} />

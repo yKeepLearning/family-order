@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <div className="bg-white pt-12 pb-8 text-center">
+      <div className="bg-white pt-6 pb-4 text-center">
         <div className="text-5xl mb-3">🏠</div>
         <h1 className="text-xl font-semibold mb-1">家庭厨房</h1>
         <p className="text-base font-semibold mt-2">饱腹训练即将开始！</p>
