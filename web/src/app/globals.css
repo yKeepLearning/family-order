@@ -1,22 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #030213;
   --color-primary: #030213;
   --color-primary-foreground: #ffffff;
   --color-secondary: #F1F0F4;
-  --color-background: #ffffff;
+  --color-secondary-foreground: #030213;
   --color-card: #ffffff;
+  --color-card-foreground: #030213;
   --color-muted: #ECECF0;
   --color-muted-foreground: #717182;
   --color-border: rgba(0, 0, 0, 0.1);
   --color-destructive: #D4183D;
+  --color-destructive-foreground: #ffffff;
+  --color-accent: #F1F0F4;
+  --color-accent-foreground: #030213;
   --font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
 }
 
 body {
   font-family: var(--font-family);
   background: var(--color-background);
-  color: var(--color-primary);
+  color: var(--color-foreground);
 }
