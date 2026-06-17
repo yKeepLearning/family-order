@@ -107,7 +107,7 @@ export default function DinerPage() {
       {/* ── Menu Tab ── */}
       {tab === "menu" && (
         <>
-          <div className="sticky top-[88px] z-40 bg-card border-b border-border flex gap-2 overflow-x-auto px-4 py-2.5 no-scrollbar">
+          <div className="sticky top-[48px] z-40 bg-card border-b border-border flex gap-2 overflow-x-auto px-4 py-2.5 no-scrollbar">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
