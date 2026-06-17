@@ -9,14 +9,14 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <div className="bg-white pt-6 pb-4 text-center">
+    <div className="min-h-screen flex flex-col justify-center bg-background">
+      <div className="bg-white pt-6 pb-8 text-center">
         <div className="text-5xl mb-3">🏠</div>
         <h1 className="text-xl font-semibold mb-1">家庭厨房</h1>
         <p className="text-base font-semibold mt-2">饱腹训练即将开始！</p>
       </div>
 
-      <div className="flex-1 px-4 pb-8">
+      <div className="px-4">
         <p className="text-xs text-muted-foreground text-center mb-5">请选择你的身份</p>
 
         <button
