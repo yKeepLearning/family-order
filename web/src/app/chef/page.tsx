@@ -9,6 +9,8 @@ import {
   Dish, Order,
 } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 const CATEGORIES = ["火锅", "凉菜", "热菜", "汤羹", "酒水", "水果"];
 
 const SEED = [
