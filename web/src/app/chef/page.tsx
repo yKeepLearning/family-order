@@ -50,7 +50,7 @@ export default function ChefPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [orderFilter, setOrderFilter] = useState<string>("pending");
   const [showAdd, setShowAdd] = useState(false);
-  const [form, setForm] = useState({ name: "", emoji: "🍜", category: "火锅", description: "", cookTime: 15 });
+  const [form, setForm] = useState({ name: "", emoji: "🍜", category: "火锅", description: "" });
 
   const load = useCallback(async () => {
     const [d, o] = await Promise.all([getDishes(), getOrders()]);
@@ -121,28 +121,37 @@ export default function ChefPage() {
               <div>
                 <p className="text-xs text-muted-foreground px-4 py-2">共 {dishes.length} 道菜</p>
                 <div className="bg-card divide-y divide-border">
-                  {dishes.map((d) => (
-                    <div key={d.id} className="flex items-center px-4 py-3 gap-3">
-                      <span className="text-2xl w-9 text-center flex-shrink-0">{d.emoji}</span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium">{d.name}</p>
-                        <p className="text-xs text-muted-foreground">{d.description}</p>
+                  {CATEGORIES.map((cat) => {
+                    const catDishes = dishes.filter((d) => d.category === cat);
+                    if (catDishes.length === 0) return null;
+                    return (
+                      <div key={cat}>
+                        <p className="text-xs text-muted-foreground bg-muted/50 px-4 py-2">{cat}</p>
+                        {catDishes.map((d) => (
+                          <div key={d.id} className="flex items-center px-4 py-3 gap-3">
+                            <span className="text-2xl w-9 text-center flex-shrink-0">{d.emoji}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium">{d.name}</p>
+                              <p className="text-xs text-muted-foreground">{d.description}</p>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              <button
+                                onClick={() => updateDish(d.id, { isAvailable: !d.isAvailable }).then(load)}
+                                className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                                  d.isAvailable ? "bg-secondary text-primary" : "bg-muted text-muted-foreground"
+                                }`}
+                              >
+                                {d.isAvailable ? "已上架" : "已下架"}
+                              </button>
+                              <button onClick={() => deleteDish(d.id).then(load)} className="p-1 text-muted-foreground hover:text-destructive">
+                                <Trash2 size={15} />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <button
-                          onClick={() => updateDish(d.id, { isAvailable: !d.isAvailable }).then(load)}
-                          className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                            d.isAvailable ? "bg-secondary text-primary" : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          {d.isAvailable ? "已上架" : "已下架"}
-                        </button>
-                        <button onClick={() => deleteDish(d.id).then(load)} className="p-1 text-muted-foreground hover:text-destructive">
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -283,12 +292,8 @@ export default function ChefPage() {
                 <label className="text-xs text-muted-foreground block mb-1.5">简介</label>
                 <input className="w-full bg-muted rounded-xl px-4 py-2.5 text-sm outline-none" placeholder="简单描述..." value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               </div>
-              <div>
-                <label className="text-xs text-muted-foreground block mb-1.5">制作时间（分钟）</label>
-                <input type="number" className="w-full bg-muted rounded-xl px-4 py-2.5 text-sm outline-none" value={form.cookTime} onChange={(e) => setForm({ ...form, cookTime: parseInt(e.target.value) || 15 })} min={1} max={120} />
-              </div>
               <button
-                onClick={() => { addDish({ ...form, isAvailable: true }).then(() => { setShowAdd(false); load(); }); }}
+                onClick={() => { addDish({ ...form, isAvailable: true, cookTime: 15 }).then(() => { setShowAdd(false); load(); }); }}
                 disabled={!form.name.trim()}
                 className="w-full rounded-full bg-primary text-white py-2.5 text-sm font-medium disabled:opacity-40"
               >
