@@ -23,7 +23,7 @@ export default function DinerPage() {
   const [category, setCategory] = useState("火锅");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [dinerName, setDinerName] = useState("小明");
+  const [dinerName, setDinerName] = useState("小雪");
   const [note, setNote] = useState("");
   const [editingName, setEditingName] = useState(false);
 
@@ -250,7 +250,7 @@ export default function DinerPage() {
             <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{cartTotal}</span>
           </div>
           <span className="font-medium text-sm flex-1 text-left">查看购物车</span>
-          <span className="text-sm opacity-80">去结算 →</span>
+          <span className="text-sm opacity-80">选好了 ›</span>
         </button>
       )}
 
