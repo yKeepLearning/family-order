@@ -1,8 +1,63 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
 .next/
-.env.local
-.env
-*.log
-.DS_Store
+out/
+build/
 dist/
+web/.next/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Design files (binary)
+*.pen
+*.png
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Server deps
 server/node_modules/
+
+# Old Mini Program code (not needed for Next.js)
+pages/
+app.js
+app.json
+app.wxss
+cloudfunctions/
+project.config.json
+project.private.config.json
+sitemap.json
+utils/
+
+# OpenCode IDE tooling
+.opencode/
+
+# Figma export (not needed for deployment)
+figma/
+
+# Docs
+docs/
+agent.md
+cart-code.md
+
+# Server (legacy)
+server/
